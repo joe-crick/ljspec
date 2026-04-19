@@ -1,0 +1,57 @@
+{
+  "name": "ljspec",
+  "version": "1.0.0",
+  "description": "A data-oriented contract and specification library for JavaScript.",
+  "keywords": [],
+  "homepage": "https://github.com/user/ljspec#readme",
+  "bugs": {
+    "url": "https://github.com/user/ljspec/issues"
+  },
+  "license": "ISC",
+  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/user/ljspec.git"
+  },
+  "files": [
+    "src",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "lint": "oxlint . && eslint .",
+    "lint:fix": "oxlint --fix . && eslint --fix .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "prepare": "husky || true"
+  },
+  "dependencies": {
+    "fast-check": "^4.7.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "vitest": "^4.1.4"
+  },
+  "lint-staged": {
+    "*.js": [
+      "oxfmt",
+      "oxlint",
+      "eslint --fix"
+    ]
+  },
+  "packageManager": "pnpm@10.33.0"
+}

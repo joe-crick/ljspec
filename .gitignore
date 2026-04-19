@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnpm-debug.log*
+
+# Build and output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor folders
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Tests and Coverage
+coverage/
+.vitest-result/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Linting/Formatting cache
+.eslintcache

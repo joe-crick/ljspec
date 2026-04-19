@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["unicorn", "oxc", "vitest", "node"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn",
+    "style": "warn"
+  },
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "sort-keys": "off",
+    "sort-imports": "off",
+    "no-magic-numbers": "off",
+    "id-length": "off",
+    "func-style": "off",
+    "no-ternary": "off",
+    "curly": "off",
+    "unicorn/no-null": "off",
+    "unicorn/consistent-function-scoping": "off",
+    "vitest/prefer-to-be-truthy": "off",
+    "vitest/prefer-to-be-falsy": "off",
+    "vitest/no-importing-vitest-globals": "off",
+    "vitest/prefer-describe-function-title": "off",
+    "jest/prefer-lowercase-title": "off",
+    "jest/prefer-ending-with-an-expect": "off",
+    "max-params": "off",
+    "no-shadow": "off",
+    "no-implicit-coercion": "off",
+    "no-nested-ternary": "off",
+    "func-names": "off",
+    "prefer-template": "off",
+    "jest/require-hook": "off",
+    "jest/prefer-strict-equal": "off",
+    "unicorn/no-nested-ternary": "off",
+    "unicorn/switch-case-braces": "off"
+  },
+  "env": {
+    "builtin": true,
+    "node": true
+  }
+}
