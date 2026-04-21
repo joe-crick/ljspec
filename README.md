@@ -8,16 +8,14 @@ A data-oriented contract and specification library for JavaScript. `ljspec` allo
 
 ```bash
 # pnpm
-pnpm add github:user/ljspec
+pnpm add github:joe-crick/ljspec
 
 # npm
-npm install github:user/ljspec
+npm install github:joe-crick/ljspec
 
 # yarn
-yarn add github:user/ljspec
+yarn add github:joe-crick/ljspec
 ```
-
-_Note: Replace `user` with the actual GitHub username where the repository is hosted._
 
 ## Core Concepts
 
@@ -37,6 +35,8 @@ Detailed guides and examples are available in the `/docs` folder:
 - [Combinators (tuple, and, or)](./docs/combinators.md)
 - [Function Contracts & Instrumentation](./docs/function-contracts.md)
 - [Integration Guide & Best Practices](./docs/integration-guide.md)
+- [Migration Guide](./docs/migration-guide.md)
+- [Stability Policy](./docs/stability-policy.md)
 
 ## Basic Example
 
@@ -79,6 +79,13 @@ const samples = fc.sample(gen(PositiveInt), { seed: 42, numRuns: 5 });
 pnpm install
 pnpm test
 ```
+
+## Release Hygiene
+
+- Changes that affect consumers must be recorded in [CHANGELOG.md](./CHANGELOG.md).
+- Public API and behavior changes should follow Semantic Versioning.
+- Migration-sensitive changes should update [docs/migration-guide.md](./docs/migration-guide.md).
+- `1.x` compatibility guarantees live in [docs/stability-policy.md](./docs/stability-policy.md).
 
 ## License
 

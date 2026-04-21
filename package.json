@@ -2,16 +2,23 @@
   "name": "ljspec",
   "version": "1.0.0",
   "description": "A data-oriented contract and specification library for JavaScript.",
-  "keywords": [],
-  "homepage": "https://github.com/user/ljspec#readme",
+  "keywords": [
+    "contracts",
+    "design-by-contract",
+    "runtime-validation",
+    "property-testing",
+    "specifications",
+    "fast-check"
+  ],
+  "homepage": "https://github.com/joe-crick/ljspec#readme",
   "bugs": {
-    "url": "https://github.com/user/ljspec/issues"
+    "url": "https://github.com/joe-crick/ljspec/issues"
   },
   "license": "ISC",
-  "author": "",
+  "author": "Joe Crick",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/user/ljspec.git"
+    "url": "git+https://github.com/joe-crick/ljspec.git"
   },
   "files": [
     "src",
