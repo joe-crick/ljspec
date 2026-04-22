@@ -1,6 +1,7 @@
 {
   "name": "ljspec",
   "version": "1.0.0",
+  "private": true,
   "description": "A data-oriented contract and specification library for JavaScript.",
   "keywords": [
     "contracts",
@@ -38,19 +39,33 @@
     "lint:fix": "oxlint --fix . && eslint --fix .",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
+    "commit": "cz",
     "prepare": "husky || true"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   },
   "dependencies": {
     "fast-check": "^4.7.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/cz-commitlint": "^20.5.1",
     "@eslint/js": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "commitizen": "^4.3.1",
     "eslint": "^10.2.1",
     "globals": "^17.5.0",
     "husky": "^9.1.7",
+    "inquirer": "^9.3.8",
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
+    "semantic-release": "^25.0.3",
     "vitest": "^4.1.4"
   },
   "lint-staged": {

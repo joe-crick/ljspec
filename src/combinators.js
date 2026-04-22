@@ -1,4 +1,4 @@
-import { oneof, record, tuple } from "fast-check";
+import { array, constant, constantFrom, date, oneof, record, tuple } from "fast-check";
 import { getSpec, isValid, conform, explain, gen } from "./core.js";
 
 export function tuple_(...specArgs) {
@@ -36,6 +36,69 @@ export function or_(...specArgs) {
     gen: () => oneof(...specs.map((spec) => gen(spec))),
   };
 }
+
+export function literal_(value) {
+  const eq = (v) => Object.is(v, value);
+  return {
+    kind: "literal",
+    value,
+    valid: eq,
+    conform: (v) => (eq(v) ? v : "::invalid"),
+    explain: (v) =>
+      eq(v) ? null : `Expected literal ${formatValue(value)}, got ${formatValue(v)}`,
+    gen: () => constant(value),
+  };
+}
+
+export function enum_(...values) {
+  const set = new Set(values);
+  const has = (v) => set.has(v);
+  return {
+    kind: "enum",
+    values,
+    valid: has,
+    conform: (v) => (has(v) ? v : "::invalid"),
+    explain: (v) =>
+      has(v)
+        ? null
+        : `Expected one of [${values.map(formatValue).join(", ")}], got ${formatValue(v)}`,
+    gen: () =>
+      values.length > 0 ? constantFrom(...values) : constant(undefined).filter(() => false),
+  };
+}
+
+export const oneOf_ = enum_;
+
+export function instanceOf_(Ctor) {
+  const check = (v) => v instanceof Ctor;
+  const ctorName = Ctor.name || "anonymous";
+  return {
+    kind: "instanceOf",
+    ctor: Ctor,
+    valid: check,
+    conform: (v) => (check(v) ? v : "::invalid"),
+    explain: (v) => (check(v) ? null : `Expected instance of ${ctorName}, got ${formatValue(v)}`),
+    gen: () => createInstanceOfGenerator(Ctor, ctorName),
+  };
+}
+
+export function arrayOf_(specArg) {
+  const spec = getSpec(specArg);
+  return {
+    kind: "arrayOf",
+    spec,
+    valid: (v) => Array.isArray(v) && v.every((el) => isValid(spec, el)),
+    conform: (v) => applyArrayOfConformance(spec, v),
+    explain: (v) => getArrayOfExplanation(spec, v),
+    gen: () => array(gen(spec)),
+  };
+}
+
+export function refine_(specArg, pred) {
+  return and_(specArg, pred);
+}
+
+export const where_ = refine_;
 
 export function shape_(fieldSpecsArg) {
   const fieldSpecs = resolveFieldSpecs(fieldSpecsArg);
@@ -177,6 +240,40 @@ function formatElementErrors(specs, v) {
 
 function formatAlternativeErrors(errors) {
   return `None of the conditions matched: ${errors.join("; ")}`;
+}
+
+function applyArrayOfConformance(spec, v) {
+  if (!Array.isArray(v)) return "::invalid";
+  const result = [];
+  for (let i = 0; i < v.length; i++) {
+    const conformed = conform(spec, v[i]);
+    if (conformed === "::invalid") return "::invalid";
+    result.push(conformed);
+  }
+  return result;
+}
+
+function getArrayOfExplanation(spec, v) {
+  if (!Array.isArray(v)) return "Not an array";
+  const errors = v
+    .map((el, i) => ({ err: explain(spec, el), i }))
+    .filter((x) => x.err)
+    .map((x) => `At index ${x.i}: ${x.err}`);
+  return errors.length > 0 ? errors.join(", ") : null;
+}
+
+function createInstanceOfGenerator(Ctor, ctorName) {
+  if (Ctor === Date) return date();
+  throw new Error(`Generation not implemented for instanceOf_(${ctorName})`);
+}
+
+function formatValue(v) {
+  if (v === undefined) return "undefined";
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return String(v);
+  }
 }
 
 function createAndGenerator(specs) {

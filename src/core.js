@@ -164,6 +164,18 @@ function inferGeneratorFactory(name) {
       return () => fc.double({ noNaN: true });
     case "Int":
       return () => fc.integer();
+    case "Bool":
+      return () => fc.boolean();
+    case "Fn":
+      return () => fc.func(fc.anything());
+    case "Null":
+      return () => fc.constant(null);
+    case "Undefined":
+      return () => fc.constant(undefined);
+    case "Date":
+      return () => fc.date();
+    case "PlainObject":
+      return () => fc.dictionary(fc.string(), fc.anything());
     default:
       return undefined;
   }
