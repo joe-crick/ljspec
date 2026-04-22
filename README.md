@@ -144,6 +144,8 @@ Commit messages must follow the [Conventional Commits](https://www.conventionalc
 
 Scopes are optional: `feat(combinators): add arrayOf_`.
 
+If you'd rather not memorize the format, run `pnpm commit` instead of `git commit` — [commitizen](https://commitizen-tools.github.io/commitizen/) prompts for each field and builds a valid message from the commitlint config.
+
 ### Stability
 
 - Public API and behavior changes follow [Semantic Versioning](https://semver.org/).
