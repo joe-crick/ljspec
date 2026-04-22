@@ -67,7 +67,7 @@ isValid(StrOrNum, true); // false
 Example:
 
 ```js
-import { Int, Str, shape_ } from 'ljspec';
+import { Int, Str, shape_ } from "ljspec";
 
 const User = shape_({
   id: Str,
@@ -83,7 +83,6 @@ This validates that:
 
 `shape_()` is intended for compositional object specs that would otherwise require hand-written
 `valid` / `explain` definitions in `sdef(...)`.
-
 
 ## Generation
 
