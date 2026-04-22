@@ -71,38 +71,38 @@ const samples = fc.sample(gen(PositiveInt), { seed: 42, numRuns: 5 });
 
 Import these directly — no need to redefine them:
 
-| Name             | Matches                                      |
-| ---------------- | -------------------------------------------- |
-| `Any`            | anything                                     |
-| `Str`            | `typeof v === "string"`                      |
-| `NonEmptyStr`    | string with length > 0                       |
-| `Num`            | `typeof v === "number"`                      |
-| `Int`            | `Number.isInteger(v)`                        |
-| `NonNegativeInt` | integer ≥ 0                                  |
-| `PositiveInt`    | integer > 0                                  |
-| `Bool`           | `typeof v === "boolean"`                     |
-| `Fn`             | `typeof v === "function"`                    |
-| `Null`           | `v === null`                                 |
-| `Undefined`      | `v === undefined`                            |
-| `Date_`          | `v instanceof Date`                          |
-| `Buffer_`        | `Buffer.isBuffer(v)` (Node)                  |
-| `PlainObject`    | non-null, non-array object                   |
+| Name             | Matches                     |
+| ---------------- | --------------------------- |
+| `Any`            | anything                    |
+| `Str`            | `typeof v === "string"`     |
+| `NonEmptyStr`    | string with length > 0      |
+| `Num`            | `typeof v === "number"`     |
+| `Int`            | `Number.isInteger(v)`       |
+| `NonNegativeInt` | integer ≥ 0                 |
+| `PositiveInt`    | integer > 0                 |
+| `Bool`           | `typeof v === "boolean"`    |
+| `Fn`             | `typeof v === "function"`   |
+| `Null`           | `v === null`                |
+| `Undefined`      | `v === undefined`           |
+| `Date_`          | `v instanceof Date`         |
+| `Buffer_`        | `Buffer.isBuffer(v)` (Node) |
+| `PlainObject`    | non-null, non-array object  |
 
 `Date_` and `Buffer_` use trailing underscores to avoid shadowing the globals. Rename on import if you prefer: `import { Date_ as DateSpec } from "ljspec"`.
 
 ## Combinators
 
-| Combinator           | Purpose                                                               |
-| -------------------- | --------------------------------------------------------------------- |
-| `tuple_(...specs)`   | Fixed-length array with positional specs                              |
-| `shape_({ ... })`    | Object with typed fields                                              |
-| `and_(...specs)`     | Value must satisfy all specs                                          |
-| `or_(...specs)`      | Value must satisfy at least one                                       |
-| `literal_(value)`    | Exact match via `Object.is`                                           |
-| `enum_(...values)`   | Value must be one of `values` (alias: `oneOf_`)                       |
-| `instanceOf_(Ctor)`  | `v instanceof Ctor`                                                   |
-| `arrayOf_(spec)`     | Array where every element matches `spec`                              |
-| `refine_(spec, pred)`| Base spec plus extra predicate (alias: `where_`)                      |
+| Combinator            | Purpose                                          |
+| --------------------- | ------------------------------------------------ |
+| `tuple_(...specs)`    | Fixed-length array with positional specs         |
+| `shape_({ ... })`     | Object with typed fields                         |
+| `and_(...specs)`      | Value must satisfy all specs                     |
+| `or_(...specs)`       | Value must satisfy at least one                  |
+| `literal_(value)`     | Exact match via `Object.is`                      |
+| `enum_(...values)`    | Value must be one of `values` (alias: `oneOf_`)  |
+| `instanceOf_(Ctor)`   | `v instanceof Ctor`                              |
+| `arrayOf_(spec)`      | Array where every element matches `spec`         |
+| `refine_(spec, pred)` | Base spec plus extra predicate (alias: `where_`) |
 
 ```javascript
 import { arrayOf_, enum_, instanceOf_, refine_, Int, Str } from "ljspec";
@@ -135,12 +135,12 @@ The package is marked `private` and **not** published to npm — consumers insta
 
 Commit messages must follow the [Conventional Commits](https://www.conventionalcommits.org/) spec. A `commit-msg` husky hook runs [commitlint](https://commitlint.js.org/) locally to enforce this.
 
-| Type                            | Effect                           |
-| ------------------------------- | -------------------------------- |
-| `fix: …`                        | patch bump (`1.0.0` → `1.0.1`)   |
-| `feat: …`                       | minor bump (`1.0.0` → `1.1.0`)   |
-| `feat!: …` or `BREAKING CHANGE:`| major bump (`1.0.0` → `2.0.0`)   |
-| `chore:`, `docs:`, `refactor:`, `test:`, `ci:`, `build:`, `style:`, `perf:` | no release |
+| Type                                                                        | Effect                         |
+| --------------------------------------------------------------------------- | ------------------------------ |
+| `fix: …`                                                                    | patch bump (`1.0.0` → `1.0.1`) |
+| `feat: …`                                                                   | minor bump (`1.0.0` → `1.1.0`) |
+| `feat!: …` or `BREAKING CHANGE:`                                            | major bump (`1.0.0` → `2.0.0`) |
+| `chore:`, `docs:`, `refactor:`, `test:`, `ci:`, `build:`, `style:`, `perf:` | no release                     |
 
 Scopes are optional: `feat(combinators): add arrayOf_`.
 

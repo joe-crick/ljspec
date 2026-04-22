@@ -42,11 +42,6 @@
     "commit": "cz",
     "prepare": "husky || true"
   },
-  "config": {
-    "commitizen": {
-      "path": "@commitlint/cz-commitlint"
-    }
-  },
   "dependencies": {
     "fast-check": "^4.7.0"
   },
@@ -74,6 +69,11 @@
       "oxlint",
       "eslint --fix"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   },
   "packageManager": "pnpm@10.33.0"
 }
