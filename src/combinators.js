@@ -1,7 +1,5 @@
-import fc from "fast-check";
+import { oneof, record, tuple } from "fast-check";
 import { getSpec, isValid, conform, explain, gen } from "./core.js";
-
-// --- Wishful Thinking: High-Level Entry Points ---
 
 export function tuple_(...specArgs) {
   const specs = resolveSpecs(specArgs);
@@ -11,7 +9,7 @@ export function tuple_(...specArgs) {
     valid: (v) => checkTupleValidity(specs, v),
     conform: (v) => applyTupleConformance(specs, v),
     explain: (v) => getTupleExplanation(specs, v),
-    gen: () => fc.tuple(...specs.map((spec) => gen(spec))),
+    gen: () => tuple(...specs.map((spec) => gen(spec))),
   };
 }
 
@@ -35,17 +33,34 @@ export function or_(...specArgs) {
     valid: (v) => checkOrValidity(specs, v),
     conform: (v) => applyOrConformance(specs, v),
     explain: (v) => getOrExplanation(specs, v),
-    gen: () => fc.oneof(...specs.map((spec) => gen(spec))),
+    gen: () => oneof(...specs.map((spec) => gen(spec))),
   };
 }
 
-// --- Implementation: Fine-Grained Named Functions ---
+export function shape_(fieldSpecsArg) {
+  const fieldSpecs = resolveFieldSpecs(fieldSpecsArg);
+  const fieldEntries = Object.entries(fieldSpecs);
+
+  return {
+    kind: "shape",
+    fieldSpecs,
+    valid: (value) => checkShapeValidity(fieldEntries, value),
+    conform: (value) => applyShapeConformance(fieldEntries, value),
+    explain: (value) => getShapeExplanation(fieldEntries, value),
+    gen: () => createShapeGenerator(fieldEntries),
+  };
+}
 
 function resolveSpecs(specArgs) {
   return specArgs.map(getSpec);
 }
 
-// Tuple Implementation
+function resolveFieldSpecs(fieldSpecsArg) {
+  return Object.fromEntries(
+    Object.entries(fieldSpecsArg).map(([key, spec]) => [key, getSpec(spec)]),
+  );
+}
+
 function checkTupleValidity(specs, v) {
   return isArray(v) && hasCorrectLength(v, specs) && allSpecsValid(specs, v);
 }
@@ -61,7 +76,6 @@ function getTupleExplanation(specs, v) {
   return formatElementErrors(specs, v);
 }
 
-// And Implementation
 function checkAndValidity(specs, v) {
   return specs.every((s) => isValid(s, v));
 }
@@ -83,7 +97,6 @@ function getAndExplanation(specs, v) {
   return null;
 }
 
-// Or Implementation
 function checkOrValidity(specs, v) {
   return specs.some((s) => isValid(s, v));
 }
@@ -101,9 +114,41 @@ function getOrExplanation(specs, v) {
   return allFailed(errors, specs) ? formatAlternativeErrors(errors) : null;
 }
 
-// --- Low-Level Utilities ---
+function checkShapeValidity(fieldEntries, value) {
+  return isObject(value) && fieldEntries.every(([key, spec]) => isValid(spec, value[key]));
+}
+
+function applyShapeConformance(fieldEntries, value) {
+  if (!isObject(value)) return "::invalid";
+
+  const result = { ...value };
+  for (const [key, spec] of fieldEntries) {
+    const conformed = conform(spec, value[key]);
+    if (conformed === "::invalid") return "::invalid";
+    result[key] = conformed;
+  }
+  return result;
+}
+
+function getShapeExplanation(fieldEntries, value) {
+  if (!isObject(value)) return "Not an object";
+
+  const errors = fieldEntries
+    .map(([key, spec]) => ({ key, err: explain(spec, value[key]) }))
+    .filter(({ err }) => err)
+    .map(({ key, err }) => `At key ${key}: ${err}`);
+
+  return errors.length > 0 ? errors.join(", ") : null;
+}
+
+function createShapeGenerator(fieldEntries) {
+  return record(Object.fromEntries(fieldEntries.map(([key, spec]) => [key, gen(spec)])), {
+    requiredKeys: fieldEntries.map(([key]) => key),
+  }).filter((value) => checkShapeValidity(fieldEntries, value));
+}
 
 const isArray = (v) => Array.isArray(v);
+const isObject = (v) => v != null && typeof v === "object" && !Array.isArray(v);
 const hasCorrectLength = (v, specs) => v.length === specs.length;
 const allSpecsValid = (specs, v) => specs.every((s, i) => isValid(s, v[i]));
 const allFailed = (errors, specs) => errors.length === specs.length;

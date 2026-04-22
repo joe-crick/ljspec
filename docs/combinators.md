@@ -60,6 +60,31 @@ isValid(StrOrNum, true); // false
 
 **Note**: `or_` returns the result of the first spec that successfully conforms the value.
 
+## `shape_()`
+
+`shape_()` composes field-level specs into an object spec.
+
+Example:
+
+```js
+import { Int, Str, shape_ } from 'ljspec';
+
+const User = shape_({
+  id: Str,
+  age: Int,
+});
+```
+
+This validates that:
+
+- the value is a non-array object
+- `id` satisfies `Str`
+- `age` satisfies `Int`
+
+`shape_()` is intended for compositional object specs that would otherwise require hand-written
+`valid` / `explain` definitions in `sdef(...)`.
+
+
 ## Generation
 
 Combinators also compose generators:
