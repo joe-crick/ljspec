@@ -5,10 +5,10 @@
   "keywords": [
     "contracts",
     "design-by-contract",
-    "runtime-validation",
+    "fast-check",
     "property-testing",
-    "specifications",
-    "fast-check"
+    "runtime-validation",
+    "specifications"
   ],
   "homepage": "https://github.com/joe-crick/ljspec#readme",
   "bugs": {
