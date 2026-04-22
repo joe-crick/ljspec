@@ -1,6 +1,7 @@
 {
   "name": "ljspec",
   "version": "1.0.0",
+  "private": true,
   "description": "A data-oriented contract and specification library for JavaScript.",
   "keywords": [
     "contracts",
